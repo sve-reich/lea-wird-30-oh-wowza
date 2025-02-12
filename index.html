@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libro que se abre desde el centro</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #c28181;
+        }
+
+        .book-container {
+            position: relative;
+            width: 700px;
+            height: 500px;
+            perspective: 1000px;
+        }
+
+        .book {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        /* Cara B (Interior del libro) */
+        .inside {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('./lea-01.jpeg'); /* Imagen del interior */
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #000;
+        }
+
+        /* Portada dividida en dos */
+        .cover {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            background-size: contain; /* Asegura que las imágenes encajen bien */
+            background-position: center;
+            border: 2px solid #000;
+            transform-origin: center;
+            transition: transform 1s ease-in-out;
+        }
+
+        .cover-left {
+            left: 0;
+            transform-origin: left;
+            background-image: url('./lea-right.jpeg'); /* Mitad izquierda */
+        }
+
+        .cover-right {
+            right: 0;
+            transform-origin: right;
+            background-image: url('./lea-left.jpeg'); /* Mitad derecha */
+        }
+
+        /* Animación de apertura */
+        .book.open .cover-left {
+            transform: rotateY(-180deg);
+        }
+
+        .book.open .cover-right {
+            transform: rotateY(180deg);
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            background: #333;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book-container">
+        <div class="book" id="book">
+            <div class="inside"></div>
+            <div class="cover cover-left"></div>
+            <div class="cover cover-right"></div>
+        </div>
+    </div>
+
+    <button onclick="toggleBook()">Abrir / Cerrar</button>
+
+    <audio id="bookAudio" src="./lea-birthday.flac"></audio>
+
+    <script>
+        function toggleBook() {
+            const book = document.getElementById("book");
+            const audio = document.getElementById("bookAudio");
+
+            book.classList.toggle("open");
+
+            if (book.classList.contains("open")) {
+                audio.play(); // Reproducir audio al abrir el libro
+            } else {
+                audio.pause(); // Pausar audio al cerrar
+                audio.currentTime = 0; // Reiniciar audio al inicio
+            }
+        }
+    </script>
+
+</body>
+</html>
